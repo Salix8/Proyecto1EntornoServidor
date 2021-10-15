@@ -10,7 +10,7 @@ function esOpcionMenuActiva(string $option): bool{
 }
 
 function  existeOpcionMenuActivaEnArray(array $options): bool{
-
+//falta por hacer
     foreach ($options as $value) {
         if (esOpcionMenuActiva($value) !== false) {
             return true;
