@@ -35,8 +35,8 @@ if ("POST" === $_SERVER["REQUEST_METHOD"]) {
             $imagenErr = true;
         }
 
-        //Comprobar el mine type
-        $extensions = array("image/jpeg", "image/jpg", "iamge/png");
+        //Comprobar el mime type
+        $extensions = array("image/jpeg", "image/jpg", "image/png");
 
         if (false === in_array($_FILES['imagen']['type'], $extensions)) {
             $errores [] = 'Extensión no permitida, sólo son válidos archivos jpg o png';
@@ -44,7 +44,7 @@ if ("POST" === $_SERVER["REQUEST_METHOD"]) {
         }
         
         if (!$imagenErr) {
-            //Si no hay ningún error, moverlo a la carpeta de la galñería 
+            //Si no hay ningún error, moverlo a la carpeta de la galería 
             if (false === move_uploaded_file($_FILES['imagen']['tmp_name'],"images/index/gallery/" . $_FILES['imagen']['name'])) {
                 $errores[] = "Se ha producido un error al mover la imagen";
                 $imagenErr = true;
