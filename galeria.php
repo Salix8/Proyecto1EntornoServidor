@@ -22,11 +22,25 @@ if ("POST" === $_SERVER["REQUEST_METHOD"]) {
             throw new FileException("Se ha producido un error al procesar el formulario");
         }
         $imageFile = new File("imagen", array("image/jpeg", "image/jpg", "image/png"), (2*1024*1024));
+        $imageFile->saveUploadedFile(ImagenGaleria::RUTA_IMAGENES_GALLERY);
+        try {
+            // Create a new SimpleImage object
+            $simpleImage = new \claviska\SimpleImage();
+            $simpleImage
+            ->fromFile(ImagenGaleria::RUTA_IMAGENES_GALLERY . $imageFile->getFileName())
+            ->resize(975, 525)
+            ->toFile(ImagenGaleria::RUTA_IMAGENES_PORTFOLIO . $imageFile->getFileName())
+            ->resize(650, 350)
+            ->toFile(ImagenGaleria::RUTA_IMAGENES_GALLERY . $imageFile->getFileName());
+        }catch(Exception $err) {
+            $errores[]= $err->getMessage();
+            $imagenErr = true;
+        }
     } catch (FileException $fe) {
         $errores[] = $fe->getMessage();
         $imagenErr = true;
     }
-    $description = sanitizeInput(($_POST["descripcion"] ?? ""));
+    $description = sanitizeInput(($_POST["description"] ?? ""));
     if (empty($description)) {
         $errores[] = "La descripcion es obligatoria";
         $descriptionError = true;

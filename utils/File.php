@@ -31,13 +31,13 @@ class File {
     public function __construct(string $fileInput, array $mimeTypes = [], int $maxSize = 0) {
 
         $this->file = ($_FILES[$fileInput] ?? "");
-
+        
         /*
         Cuidado. Puede ser que si ha habido algun error en la subida, la variable 
         $_FILES[$fileInput] y, por tanto $this->file, no esté informada
         */
 
-        if ($this->file) {
+        if (empty($this->file)) {
             throw new FileException("Se ha producido un error al procesar el formulario.");
         }
         if ($this->file["error"] !== UPLOAD_ERR_OK) {
@@ -67,7 +67,6 @@ class File {
         $this->fileName = sanitizeInput($this->file["name"]);
 
     }
-
     
 
     /**
