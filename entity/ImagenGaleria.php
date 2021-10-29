@@ -1,6 +1,10 @@
 <?php 
 class ImagenGaleria{
 
+    const RUTA_IMAGENES_PORTFOLIO = 'images/index/portfolio/';
+
+    const RUTA_IMAGENES_GALLERY = 'images/index/gallery/';
+
     /**
      * @var string
      */
@@ -159,13 +163,6 @@ class ImagenGaleria{
         return $this;
     }
 
-
-
-
-
-    const RUTA_IMAGENES_PORTFOLIO = 'images/index/portfolio/';
-
-    const RUTA_IMAGENES_GALLERY = 'images/index/gallery/';
 
     //....  
 

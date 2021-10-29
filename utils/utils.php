@@ -26,3 +26,10 @@ function sanitizeInput(string $data): string {
 
     return $data;
 }
+
+function getAsociados(array $asociados): array{
+    shuffle($asociados);
+    $nuevoArray = array_slice($asociados, 0, 3);
+
+    return $nuevoArray;
+}
