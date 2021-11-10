@@ -1,64 +1,79 @@
 <?php
     $title = "Asociados";
-
     require_once "./utils/utils.php";
-    require_once "./entity/Asociado.php";
-    require_once "./utils/File.php";
+    require_once "./utils/Forms/InputElement.php";
+    require_once "./utils/Forms/TextareaElement.php";
+    require_once "./utils/Forms/ButtonElement.php";
+    require_once "./utils/Forms/FileElement.php";
+    require_once "./utils/Forms/FormElement.php";
+    require_once "./utils/Forms/custom/MyFormGroup.php";
+    require_once "./utils/Forms/custom/MyFormControl.php";
+    require_once "./utils/Validator/NotEmptyValidator.php";
+    require_once "./utils/Validator/MimetypeValidator.php";
+    require_once "./utils/Validator/MaxSizeValidator.php";    
     require_once "./exceptions/FileException.php";
-
     require_once "./utils/SimpleImage.php";
+    require_once "./entity/Asociado.php";
+    
+    $info = $urlImagen = "";
 
-//Inicializar siempre todas la variables usadads en el controlador y la vista
+    $nombre = new InputElement('text');
+    $nombre
+     ->setName('nombre')
+     ->setId('nombre')
+     ->setValidator(new NotEmptyValidator('El nombre es obligatorio', true));
+    $nombreWrapper = new MyFormControl($nombre, 'Nombre', 'col-xs-12');
 
-$info = $description = $urlLogo = $nombreLogo = "";
-$descriptionError = $nombreLogoError = $logoErr = $hayErrores = false;
-$errores = [];
+    $description = new TextareaElement();
+    $description
+     ->setName('descripcion')
+     ->setId('descripcion');
+    $descriptionWrapper = new MyFormControl($description, 'Descripción', 'col-xs-12');
 
-if ("POST" === $_SERVER["REQUEST_METHOD"]) {
-    //Procesamos el campo de tipo file
-    try {
-        //nunca debemos confiar en que llefgan todos los datos!
-        if (empty($_POST)){
-            throw new FileException("Se ha producido un error al procesar el formulario");
+    $fv = new MimetypeValidator(['image/jpeg', 'image/jpg', 'image/png'], 'Formato no soportado', true);
+    $fv->setNextValidator(new MaxSizeValidator(2 * 1024 * 1024, 'El archivo no debe exceder 2M', true));
+
+    $file = new FileElement();
+    $file
+      ->setName('imagen')
+      ->setId('imagen')
+      ->setValidator($fv);
+
+    $labelFile = new LabelElement('Imagen', $file);
+
+    $b = new ButtonElement('Send');
+    $b->setCssClass('pull-right btn btn-lg sr-button');
+
+    $form = new FormElement('', 'multipart/form-data');
+    $form
+    ->setCssClass('form-horizontal')
+    ->appendChild($labelFile)
+    ->appendChild($file)
+    ->appendChild($nombreWrapper)
+    ->appendChild($descriptionWrapper)
+    ->appendChild($b);
+
+    if ("POST" === $_SERVER["REQUEST_METHOD"]) {
+        $form->validate();
+        if (!$form->hasError()) {
+          try {
+            $file->saveUploadedFile(Asociado::RUTA_IMAGENES_ASOCIADO);  
+              // Create a new SimpleImage object
+              $simpleImage = new \claviska\SimpleImage();
+              $simpleImage
+              ->fromFile(Asociado::RUTA_IMAGENES_ASOCIADO . $file->getFileName())  
+              ->resize(50, 50)
+              ->toFile(Asociado::RUTA_IMAGENES_ASOCIADO . $file->getFileName());
+              $info = 'Imagen enviada correctamente'; 
+              $urlImagen = Asociado::RUTA_IMAGENES_ASOCIADO . $file->getFileName();
+              $form->reset();
+            
+          }catch(Exception $err) {
+              $form->addError($err->getMessage());
+              $imagenErr = true;
+          }
+        }else{
+          
         }
-        $logoFile = new File("logo", array("image/jpeg", "image/jpg", "image/png"), (2*1024*1024));
-        $logoFile->saveUploadedFile(Asociado::RUTA_IMAGENES_ASOCIADO);
-        try {
-            // Create a new SimpleImage object
-            $simpleImage = new \claviska\SimpleImage();
-            $simpleImage
-            ->fromFile(Asociado::RUTA_IMAGENES_ASOCIADO . $logoFile->getFileName())
-            ->resize(50, 50)
-            ->toFile(Asociado::RUTA_IMAGENES_ASOCIADO . $logoFile->getFileName());
-        }catch(Exception $err) {
-            $errores[]= $err->getMessage();
-            $logoErr = true;
-        }
-    } catch (FileException $fe) {
-        $errores[] = $fe->getMessage();
-        $logoErr = true;
-    }
-    $nombreLogo = sanitizeInput(($_POST["nombreLogo"] ?? ""));
-    if (empty($nombreLogo)) {
-        $errores[] = "El nombre es obligatorio";
-        $nombreLogoError = true;
-    }
-
-    $description = sanitizeInput(($_POST["description"] ?? ""));
-    if (empty($description)) {
-        $errores[] = "La descripcion es obligatoria";
-        $descriptionError = true;
-    }
-
-    if (0 == count($errores)) {
-        $info = "imagen enviada correctamete:";
-        $urlLogo = Asociado::RUTA_IMAGENES_ASOCIADO . $logoFile->getFileName();
-        //Reseteamos los datos del formulario
-        $description = "";
-        $nombreLogo = "";
-    }else {
-        $info = "Datos erróneos";
-    }
-}
-
-include("./views/asociado.view.php");
+    }    
+    include("./views/asociados.view.php");

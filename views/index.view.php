@@ -1,9 +1,8 @@
 <?php
-
   include __DIR__ . "/partials/inicio-doc.part.php";
   include __DIR__ . "/partials/nav.part.php";
-
 ?>
+
 
 <!-- Principal Content Start -->
    <div id="index">
@@ -41,22 +40,21 @@
       <!-- Navigation Table Content -->
         <div class="tab-content">
           <?php
-            $categoryID="1";
+            $categoryId = '1';
             $active = true;
             shuffle($galeria);
-            include __DIR__ . "/partials/imagen-galeria.part.php"; 
-
-            $categoryID="2";
+            include __DIR__ . "/partials/imagen-galeria.part.php";
+            $categoryId = '2';
             $active = false;
             shuffle($galeria);
-            include __DIR__ . "/partials/imagen-galeria.part.php"; 
-
-            $categoryID="3";
+            include __DIR__ . "/partials/imagen-galeria.part.php";
+            $categoryId = '3';
             $active = false;
             shuffle($galeria);
-            include __DIR__ . "/partials/imagen-galeria.part.php"; 
+            include __DIR__ . "/partials/imagen-galeria.part.php";
+
           ?>
-
+  
         </div>
     <!-- End of Navigation Table Content -->
       </div><!-- End of Index-body box -->
@@ -76,16 +74,32 @@
       </div>
     <!-- End of Newsletter form -->  
 
-    <?php
-
-      include __DIR__ . "/partials/asociado.part.php";
-
-    ?>   
-
+<?php
+  include __DIR__ . "/partials/asociado.part.php";
+?>
    </div><!-- End of index box -->
 
+   <!-- Footer -->
+   <footer class="home-page">
+     <div class="container text-muted text-center">
+       <div class="row">
+         <ul class="nav col-sm-4">
+           <li class="footer-number"><i class="fa fa-phone sr-icons"></i>  (00228)92229954 </li>
+           <li><i class="fa fa-envelope sr-icons"></i>  kouvenceslas93@gmail.com</li>
+           <li>Photography Fanatic Template &copy; 2017</li>
+         </ul>
+         <ul class="list-inline social-buttons col-sm-4 col-sm-push-4">
+            <li><a href="#"><i class="fa fa-facebook sr-icons"></i></a>
+            </li>
+            <li><a href="#"><i class="fa fa-twitter sr-icons"></i></a>
+            </li>
+            <li><a href="#"><i class="fa fa-google-plus sr-icons"></i></a>
+            </li>
+         </ul>
+       </div>
+     </div>
+   </footer>
+
 <?php
-
   include __DIR__ . "/partials/fin-doc.part.php";
-
-?>   
+?>

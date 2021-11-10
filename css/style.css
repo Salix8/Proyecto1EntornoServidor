@@ -1208,9 +1208,8 @@ img{
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
-
-/*Color de los campos que hayan dado error*/
+/*-- End of Contact Page Stylesheet --*/
+/* Estilos propios */
 #contact input.has-error{
 	background-color:rgba(100,0,0,0.5);
 }
-/*-- End of Contact Page Stylesheet --*/

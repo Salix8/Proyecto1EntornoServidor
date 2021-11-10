@@ -1,8 +1,8 @@
 <?php 
-class Asociado{
 
+class Asociado
+{
     const RUTA_IMAGENES_ASOCIADO = 'images/index/';
-
     /**
      * @var string
      */
@@ -16,15 +16,18 @@ class Asociado{
     /**
      * @var string
      */
-    private $description;
+    private $descripcion;
 
-    public function __construct(string $nombre, string $logo, string $description){
+    /**
+     * @param string $nombre
+     * @param string $logo
+     * @param string $descripcion
+     */
+    public function __construct(string $nombre, string $logo, string $descripcion = ""){
         $this->nombre = $nombre;
         $this->logo = $logo;
-        $this->description = $description;
+        $this->descripcion = $descripcion;
     }
-
-
 
     /**
      * Get the value of nombre
@@ -75,40 +78,36 @@ class Asociado{
     }
 
     /**
-     * Get the value of description
+     * Get the value of descripcion
      *
-     * @return  int
+     * @return  string
      */ 
-    public function getDescription()
+    public function getDescripcion()
     {
-        return $this->description;
+        return $this->descripcion;
     }
 
     /**
-     * Set the value of description
+     * Set the value of descripcion
      *
-     * @param  string  $description
+     * @param  string  $descripcion
      *
      * @return  self
      */ 
-    public function setDescription(string $description)
+    public function setDescripcion(string $descripcion)
     {
-        $this->description = $description;
+        $this->descripcion = $descripcion;
 
         return $this;
     }
 
     /**
-     * Devuelve el path a las imágenes del portfolio
+     * Devuelve el path a las imágenes del asociado
      *
      * @return string
      */
-
-    public function getUrlLogo() : string
-
+    public function getUrlImagen() : string
     {
         return self::RUTA_IMAGENES_ASOCIADO . $this->getLogo();
     }
-
-
 }
