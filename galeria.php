@@ -13,8 +13,14 @@
     require_once "./exceptions/FileException.php";
     require_once "./utils/SimpleImage.php";
     require_once "./entity/ImagenGaleria.php";
+    require_once "./database/Connection.php";
+    require_once "./database/QueryBuilder.php";
+    require_once "./core/App.php";
+
+    $connection = Connection::make($config);
     
     $info = $urlImagen = "";
+    $sql = "";
 
     $description = new TextareaElement();
     $description
@@ -45,23 +51,37 @@
     ->appendChild($descriptionWrapper)
     ->appendChild($b);
 
+    $config = require_once 'app/config.php';
+    App::bind("config", $config);
+    App::bind("connection", Connection::make($config['database']));
+
     if ("POST" === $_SERVER["REQUEST_METHOD"]) {
         $form->validate();
         if (!$form->hasError()) {
           try {
-            $file->saveUploadedFile(ImagenGaleria::RUTA_IMAGENES_GALLERY);  
-              // Create a new SimpleImage object
-              $simpleImage = new \claviska\SimpleImage();
-              $simpleImage
-              ->fromFile(ImagenGaleria::RUTA_IMAGENES_GALLERY . $file->getFileName())  
-              ->resize(975, 525)
-              ->toFile(ImagenGaleria::RUTA_IMAGENES_PORTFOLIO . $file->getFileName())
-              ->resize(650, 350)
-              ->toFile(ImagenGaleria::RUTA_IMAGENES_GALLERY . $file->getFileName()); 
-              $info = 'Imagen enviada correctamente'; 
-              $urlImagen = ImagenGaleria::RUTA_IMAGENES_GALLERY . $file->getFileName();
+            $file->saveUploadedFile(ImagenGaleria::RUTA_IMAGENES_GALLERY);
+            // Create a new SimpleImage object
+            $simpleImage = new \claviska\SimpleImage();
+            $simpleImage
+            ->fromFile(ImagenGaleria::RUTA_IMAGENES_GALLERY . $file->getFileName())  
+            ->resize(975, 525)
+            ->toFile(ImagenGaleria::RUTA_IMAGENES_PORTFOLIO . $file->getFileName())
+            ->resize(650, 350)
+            ->toFile(ImagenGaleria::RUTA_IMAGENES_GALLERY . $file->getFileName()); 
+            $info = 'Imagen enviada correctamente'; 
+            $urlImagen = ImagenGaleria::RUTA_IMAGENES_GALLERY . $file->getFileName();
+            //Grabamos en la base de datos
+            $connection = Connection::make();
+            $sql = "INSERT INTO imagenes (nombre, descripcion) VALUES (:nombre, :descripcion)";
+            $pdoStatement = $connection->prepare($sql);
+            $parameters = [":nombre" => $file->getFileName(),
+                          ":descripcion" => $description->getValue()];
+            if (false === $pdoStatement->execute($parameters)) {
+              $from->addError("No se ha podido guardar la imagen en la base de datos.");
+            } else {
+              $info = "Imagen enviada correctamente.";
               $form->reset();
-            
+            }            
           }catch(Exception $err) {
               $form->addError($err->getMessage());
               $imagenErr = true;
@@ -69,5 +89,13 @@
         }else{
           
         }
+    }
+
+    $queryBuilder = new QueryBuilder();
+    try {
+      $imagenes = $queryBuilder->findAll("imagenes", "ImagenGaleria");
+    } catch (QueryException $qe) {
+      $imagenes = [];
+      //En estes caso podríamos generar un mensaje de log o parar el script mediante dia($qe->getMessage())
     }
     include("./views/galeria.view.php");
