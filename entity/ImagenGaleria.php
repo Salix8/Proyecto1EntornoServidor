@@ -1,4 +1,6 @@
 <?php
+    require_once __DIR__ . "/Entity.php";
+
 class ImagenGaleria extends Entity {
     const RUTA_IMAGENES_PORTFOLIO = 'images/index/portfolio/';
     const RUTA_IMAGENES_GALLERY = 'images/index/gallery/';
@@ -16,7 +18,7 @@ class ImagenGaleria extends Entity {
     /**
      * @var string
      */
-    private $descripcion;
+    private $description;
     
     /**
      * @var int
@@ -34,16 +36,27 @@ class ImagenGaleria extends Entity {
     private $numDownloads;
     
 
-    public function __construct(string $nombre = "", string $descripcion = "",
+        /**
+
+     * @var int
+
+     */
+
+    private $categoria;
+
+    
+
+     public function __construct(string $nombre = '', string $description = '',
                                 int $numVisualizaciones = 0, int $numLikes = 0,
-                                int $numDownloads = 0){
-        $this->id=null;
+                                int $numDownloads = 0, int $categoria = 0){
+
+        $this->id = null;
         $this->nombre = $nombre;
-        $this->descripcion = $descripcion;
+        $this->description = $description;
         $this->numVisualizaciones = $numVisualizaciones;
         $this->numLikes = $numLikes;
         $this->numDownloads = $numDownloads;
-
+        $this->categoria = $categoria;
     }
 
     /**
@@ -51,8 +64,7 @@ class ImagenGaleria extends Entity {
      *
      * @return  string
      */ 
-    public function getNombre()
-    {
+    public function getNombre() {
         return $this->nombre;
     }
 
@@ -63,8 +75,7 @@ class ImagenGaleria extends Entity {
      *
      * @return  self
      */ 
-    public function setNombre(string $nombre)
-    {
+    public function setNombre(string $nombre) {
         $this->nombre = $nombre;
 
         return $this;
@@ -75,9 +86,8 @@ class ImagenGaleria extends Entity {
      *
      * @return  string
      */ 
-    public function getDescripcion()
-    {
-        return $this->descripcion;
+    public function getdescription() {
+        return $this->description;
     }
 
     /**
@@ -87,9 +97,8 @@ class ImagenGaleria extends Entity {
      *
      * @return  self
      */ 
-    public function setDescripcion(string $descripcion)
-    {
-        $this->descripcion = $descripcion;
+    public function setdescription(string $description) {
+        $this->description = $description;
 
         return $this;
     }
@@ -99,8 +108,7 @@ class ImagenGaleria extends Entity {
      *
      * @return  int
      */ 
-    public function getNumVisualizaciones()
-    {
+    public function getNumVisualizaciones() {
         return $this->numVisualizaciones;
     }
 
@@ -111,8 +119,7 @@ class ImagenGaleria extends Entity {
      *
      * @return  self
      */ 
-    public function setNumVisualizaciones(int $numVisualizaciones)
-    {
+    public function setNumVisualizaciones(int $numVisualizaciones) {
         $this->numVisualizaciones = $numVisualizaciones;
 
         return $this;
@@ -123,8 +130,7 @@ class ImagenGaleria extends Entity {
      *
      * @return  int
      */ 
-    public function getNumLikes()
-    {
+    public function getNumLikes() {
         return $this->numLikes;
     }
 
@@ -135,8 +141,7 @@ class ImagenGaleria extends Entity {
      *
      * @return  self
      */ 
-    public function setNumLikes(int $numLikes)
-    {
+    public function setNumLikes(int $numLikes) {
         $this->numLikes = $numLikes;
 
         return $this;
@@ -147,8 +152,7 @@ class ImagenGaleria extends Entity {
      *
      * @return  int
      */ 
-    public function getNumDownloads()
-    {
+    public function getNumDownloads() {
         return $this->numDownloads;
     }
 
@@ -159,8 +163,7 @@ class ImagenGaleria extends Entity {
      *
      * @return  self
      */ 
-    public function setNumDownloads(int $numDownloads)
-    {
+    public function setNumDownloads(int $numDownloads) {
         $this->numDownloads = $numDownloads;
 
         return $this;
@@ -171,8 +174,7 @@ class ImagenGaleria extends Entity {
      *
      * @return string
      */
-    public function getUrlPortfolio() : string
-    {
+    public function getUrlPortfolio() : string {
         return self::RUTA_IMAGENES_PORTFOLIO . $this->getNombre();
     }
 
@@ -181,8 +183,7 @@ class ImagenGaleria extends Entity {
      *
      * @return string
      */
-    public function getUrlGallery() : string
-    {
+    public function getUrlGallery() : string {
         return self::RUTA_IMAGENES_GALLERY . $this->getNombre();
     }
 
@@ -191,8 +192,7 @@ class ImagenGaleria extends Entity {
      *
      * @return  int
      */ 
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -203,21 +203,50 @@ class ImagenGaleria extends Entity {
      *
      * @return  self
      */ 
-    public function setId(int $id)
-    {
+    public function setId(int $id) {
         $this->id = $id;
 
         return $this;
     }
 
+    /**
+     * Get the value of categoria
+     *
+     * @return  int
+     */ 
+
+    public function getCategoria() {
+        return $this->categoria;
+
+    }
+
+    /**
+     * Set the value of categoria
+     *
+     * @param  int  $categoria
+     *
+     * @return  self
+     */ 
+
+    public function setCategoria(int $categoria) {
+
+        $this->categoria = $categoria;
+
+        return $this;
+
+    }
+
     public function toArray(): array {
+
         return [
-            "id" => $this->getId(),
-            "nombre" => $this->getNombre(),
-            "descripcion" => $this->getDescripcion(),
-            "numVisualizaciones" => $this->getNumVisualizaciones(),
-            "numlikes" => $this->getNumLikes(),
-            "numDownloads" => $this->getNumDownloads()
+            'id' => $this->getId(),
+            'nombre' => $this->getNombre(),
+            'descripcion' => $this->getdescription(),
+            'numVisualizaciones' => $this->getNumVisualizaciones(),
+            'numLikes' => $this->getNumLikes(),
+            'numDownloads' => $this->getNumDownloads(),
+            'categoria' => $this->getCategoria()
         ];
+
     }
 }
