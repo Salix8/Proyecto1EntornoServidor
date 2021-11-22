@@ -14,6 +14,7 @@
     require_once "./exceptions/FileException.php";
     require_once "./utils/SimpleImage.php";
     require_once "./entity/Asociado.php";
+    require_once "./repository/AsociadoRepository.php";
     
     $info = $urlImagen = "";
 
@@ -45,6 +46,12 @@
     $b->setCssClass('pull-right btn btn-lg sr-button');
 
     $form = new FormElement('', 'multipart/form-data');
+
+    $config = require_once 'app/config.php';
+    App::bind("config", $config);
+    App::bind("connection", Connection::make($config['database']));
+    $repositorio = new AsociadoRepository();
+
     $form
     ->setCssClass('form-horizontal')
     ->appendChild($labelFile)
@@ -52,6 +59,8 @@
     ->appendChild($nombreWrapper)
     ->appendChild($descriptionWrapper)
     ->appendChild($b);
+
+  
 
     if ("POST" === $_SERVER["REQUEST_METHOD"]) {
         $form->validate();
@@ -66,6 +75,10 @@
               ->toFile(Asociado::RUTA_IMAGENES_ASOCIADO . $file->getFileName());
               $info = 'Imagen enviada correctamente'; 
               $urlImagen = Asociado::RUTA_IMAGENES_ASOCIADO . $file->getFileName();
+              //Grabamos en la base de datos
+              $asociado = new Asociado($nombre->getValue(), $file->getFileName(), $description->getValue());
+              $repositorio->save($asociado);
+              $info = "Imagen insertada correctament";
               $form->reset();
             
           }catch(Exception $err) {
@@ -76,4 +89,10 @@
           
         }
     }    
+    try {
+      $imagenes = $repositorio->findAll();
+    } catch (QueryException $qe) {
+      $imagenes = [];
+      //En estes caso podríamos generar un mensaje de log o parar el script mediante dia($qe->getMessage())
+    }
     include("./views/asociados.view.php");

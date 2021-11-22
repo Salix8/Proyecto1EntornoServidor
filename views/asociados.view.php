@@ -14,7 +14,34 @@
                 <a href='<?=$urlImagen?>' target='_blank'>Ver Imagen</a>
             <?php endif; ?>
            <?=$form->render();?>
-           
+           <hr class="divider">
+            <div class="imagenes_galeria">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">nombre</th>
+                            <th scope="col">logo</th>
+                            <th scope="col">descripcion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($asociados as $asociado): ?>
+                            <tr>
+                                <th scope="row"><?= $asociado->getId(); ?></th>
+                                <td><?= $asociado->getNombre(); ?></td>
+                                <td>
+                                    <img src="<?= $asociado->getUrlGallery(); ?>"
+                                        alt="<?= $asociado->getdescription(); ?>"
+                                        title="<?= $asociado->getdescription(); ?>"
+                                        width="100px">
+                                </td>
+                                <td><?= $asociado->getDescripcion(); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

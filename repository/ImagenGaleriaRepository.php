@@ -22,7 +22,7 @@ class ImagenGaleriaRepository extends QueryBuilder {
         $this->update($categoria);
     }
 
-    public function save(Entity $imagenGaleria){
+    public function save(Entity $imagenGaleria) {
         $fnGuardaImagen = function () use ($imagenGaleria){
             $categoria = $this->getCategoria($imagenGaleria);
             $categoriaRepositorio = new CategoriaRepository();

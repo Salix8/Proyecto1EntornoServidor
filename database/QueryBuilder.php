@@ -41,7 +41,6 @@
                     implode(", ", array_keys($parameters)),
                     ":" . implode(", :", array_keys($parameters))
                 );
-                print_r($parameters);
                 $statement = $this->connection->prepare($sql);
                 $statement->execute($parameters);
 
@@ -99,23 +98,19 @@
          * @param array $parameters
          * @return string
          */
-
-         ##################################################
-         ##################################################
-                #Errores
-         ##################################################
-         ##################################################
          
         private function getUpdates(array $parameters): string {
             $updates = "";
             foreach ($parameters as $key => $value) {
                 if ($key !== "id") {
                     if ($updates !== "") {
-                        $updates .= "=:" . $key;
+                        $updates .= ", ";
+                       
                     }
                 }
-                return $updates;
+                $updates .= $key . "=:" . $key;
             }
+            return $updates;
         }
 
         /**
@@ -130,8 +125,6 @@
                     $this->table,
                     $this->getUpdates($parameters)
                 );
-                //echo $this->table;
-                //print_r($parameters);
                 $statement = $this->connection->prepare($sql);
                 $statement->execute($parameters);
             } catch (\PDOException $pdoException) {
