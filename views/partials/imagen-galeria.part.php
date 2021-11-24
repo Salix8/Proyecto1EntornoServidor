@@ -3,7 +3,7 @@
       <?php foreach ($galeria as $itemGaleria):?>
       <div class="col-xs-12 col-sm-6 col-md-3">
         <div class="sol">
-            <img class="img-responsive" src="<?=$itemGaleria->getUrlPortfolio()?>" alt="<?=$itemGaleria->getDescripcion()?>">
+            <img class="img-responsive" src="<?=$itemGaleria->getUrlPortfolio()?>" alt="<?=$itemGaleria->getDescription()?>">
             <div class="behind">
                 <div class="head text-center">
                 <ul class="list-inline">

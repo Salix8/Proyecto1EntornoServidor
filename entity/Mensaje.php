@@ -1,8 +1,8 @@
 <?php 
 
-require_once __DIR__ . "./Entity.php";
+require_once __DIR__ . "/Entity.php";
 
-class texto extends Entity{
+class Mensaje extends Entity{
 
     /**
      * @var int
@@ -48,14 +48,13 @@ class texto extends Entity{
      * @param string $texto
      * @param $fecha
      */
-    public function __construct(int $id,string $nombre, string $apellidos, string $email, string $asunto, string $texto, string $fecha){
-        $this->id = $id;
+    public function __construct(string $nombre = "", string $apellidos = "", string $email = "", string $asunto = "", string $texto = ""){
+        $this->id = null;
         $this->nombre = $nombre;
-        $this->nombre = $apellidos;
-        $this->nombre = $email;
-        $this->nombre = $asunto;
-        $this->nombre = $texto;
-        $this->fecha = $fecha;
+        $this->apellidos = $apellidos;
+        $this->email = $email;
+        $this->asunto = $asunto;
+        $this->texto = $texto;
     }
 
     public function toArray(): array {
@@ -66,8 +65,7 @@ class texto extends Entity{
             'apellidos' => $this->getApellidos(),
             'email' => $this->getemail(),
             'asunto' => $this->getAsunto(),
-            'texto' => $this->getApellidos(),
-            'fecha' => $this->getFecha()
+            'texto' => $this->getApellidos()
         ];
     }
 

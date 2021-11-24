@@ -8,7 +8,7 @@ class AsociadoRepository extends QueryBuilder {
 
     public function __construct(){
 
-        parent::__construct('asociados', 'Asociados');
+        parent::__construct('asociados', 'Asociado');
 
     }
 

@@ -19,5 +19,7 @@
     $repositorio = new AsociadoRepository();
     $asociados = $repositorio->findAll();
 
+    $asociados = getAsociados($asociados);
+
 
     include("./views/index.view.php");

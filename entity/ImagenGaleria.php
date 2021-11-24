@@ -86,7 +86,7 @@ class ImagenGaleria extends Entity {
      *
      * @return  string
      */ 
-    public function getdescription() {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -97,7 +97,7 @@ class ImagenGaleria extends Entity {
      *
      * @return  self
      */ 
-    public function setdescription(string $description) {
+    public function setDescription(string $description) {
         $this->description = $description;
 
         return $this;
@@ -241,7 +241,7 @@ class ImagenGaleria extends Entity {
         return [
             'id' => $this->getId(),
             'nombre' => $this->getNombre(),
-            'descripcion' => $this->getdescription(),
+            'descripcion' => $this->getDescription(),
             'numVisualizaciones' => $this->getNumVisualizaciones(),
             'numLikes' => $this->getNumLikes(),
             'numDownloads' => $this->getNumDownloads(),
