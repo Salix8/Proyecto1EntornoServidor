@@ -1,21 +1,28 @@
 <?php
 
-require_once __DIR__ . '/../entity/Usuario.php.php';
+require_once __DIR__ . '/../entity/Usuario.php';
 require_once __DIR__ . '/../database/QueryBuilder.php';
 
 class UsuarioRepository extends QueryBuilder {
 
-    public function __construct(){
 
-        parent::__construct('usuarios', 'Usuario');
+    /**
+     * Generator de password
+     * 
+     * @var IPasswordGenerator
+     */
+    private $passwordGenerator;
 
+    public function __construct(IPasswordGenerator $passwordGenerator) {
+        $this->passwordGenerator = $passwordGenerator;
+        parent::__construct("users", "Usuario");
     }
 
 
     public function findByUserNameAndPassword(string $username, string $password): ?Usuario {
         $sql = "SELECT * FROM $this->table WHERE username = :username AND password = :password";
-        $parameters = ["username" => $username,
-                      "password" => $password];
+        $parameters = ['username' => $username, 
+                        'password' => $this->passwordGenerator::encrypt($password)];
         try {
             $pdoStatement = $this->connection->prepare($sql);
             $pdoStatement->execute($parameters);

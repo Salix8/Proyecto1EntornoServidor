@@ -15,6 +15,13 @@
     require_once "./utils/SimpleImage.php";
     require_once "./entity/Asociado.php";
     require_once "./repository/AsociadoRepository.php";
+
+    session_start();
+
+    if (!isset($_SESSION['username'])) {
+      header('location: /login.php');
+    }
+    
     
     $info = $urlImagen = "";
 

@@ -9,7 +9,7 @@
             <h1>LOGIN</h1>
             <hr>
             <?php if (isset($_SESSION["username"])): ?>
-                Ya está logeado como <?=$_SESSION["username"]?>
+                Ya estás logeado como <?=$_SESSION["username"]?>
             <?php else:?>
                 <?php
                     include __DIR__ . "/partials/show-messages.part.php";

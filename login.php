@@ -11,13 +11,14 @@
     require_once "./utils/Forms/custom/MyFormControl.php";
     require_once "./utils/Validator/NotEmptyValidator.php";
     require_once "./entity/Usuario.php";
-    require_once "./repository/UsuarioRepository.php.php";
+    require_once "./repository/UsuarioRepository.php";
     require_once "./core/App.php";
+    require_once "./security/PlainPasswordGenerator.php";
 
     $config = require_once 'app/config.php';
     App::bind("config", $config);
     App::bind("connection", Connection::make($config['database']));
-    $repositorio = new UsuarioRepository();
+    $repositorio = new UsuarioRepository(new PlainPasswordGenerator());
 
     session_start();
 
@@ -26,9 +27,7 @@
     $nombreUsuario = new InputElement('text');
 
     $nombreUsuario
-
       ->setName('username')
-
       ->setId('username');
 
     $nombreUsuario->setValidator(new NotEmptyValidator('El nombre de usuari@ no puede estar vacío', true));
@@ -38,9 +37,7 @@
     $pass = new PasswordElement();
 
     $pass
-
       ->setName('password')
-
       ->setId('password');
 
     $passWrapper = new MyFormControl($pass, 'Contraseña', 'col-xs-12');
@@ -50,13 +47,13 @@
     $form = new FormElement();
 
     $form
-    ->appendChild($userWrapper)
-    ->appendChild($passWrapper)
-    ->appendChild($b);
+        ->appendChild($userWrapper)
+        ->appendChild($passWrapper)
+        ->appendChild($b);
 
     if ("POST" === $_SERVER["REQUEST_METHOD"]) {
         $form->validate();
-        if (!$form-harError()) {
+        if (!$form->hasError()) {
             try {
                 $usuario = $repositorio->findByUserNameAndPassword($nombreUsuario->getValue(), $pass->getValue());
                 $_SESSION["usurname"] = $usuario->getUsername();
@@ -71,5 +68,5 @@
         }
     }
 
-
+    include ("./views/login.view.php");
     

@@ -8,17 +8,17 @@
         /**
          * @param var $connection
          */
-        private $connection;
+        protected $connection;
 
         /**
          * @var string
          */
-        private $table;
+        protected $table;
 
         /**
          * @var string
          */
-        private $classEntity;
+        protected $classEntity;
 
 
         public function __construct(string $table, string $classEntity){

@@ -8,15 +8,18 @@
     require_once "./utils/Forms/FormElement.php";
     require_once "./utils/Forms/custom/MyFormGroup.php";
     require_once "./utils/Forms/custom/MyFormControl.php";
+    require_once "./utils/Forms/PasswordElement.php";
+    require_once "./utils/Validator/PasswordMatchValidator.php";
     require_once "./utils/Validator/NotEmptyValidator.php";
     require_once "./entity/Usuario.php";
-    require_once "./repository/UsuarioRepository.php.php";
+    require_once "./repository/UsuarioRepository.php";
     require_once "./core/App.php";
+    require_once "./security/PlainPasswordGenerator.php";
 
     $config = require_once 'app/config.php';
     App::bind("config", $config);
     App::bind("connection", Connection::make($config['database']));
-    $repositorio = new UsuarioRepository();
+    $repositorio = new UsuarioRepository(new PlainPasswordGenerator());
 
     session_start();
 
@@ -25,9 +28,7 @@
     $nombreUsuario = new InputElement('text');
 
     $nombreUsuario
-
       ->setName('username')
-
       ->setId('username');
 
     $nombreUsuario->setValidator(new NotEmptyValidator('El nombre de usuari@ no puede estar vacío', true));
@@ -37,9 +38,7 @@
     $email = new EmailElement();
 
     $email
-
       ->setName('email')
-
       ->setId('email');
 
     $emailWrapper = new MyFormControl($email, 'Correo electrónico', 'col-xs-12');
@@ -49,11 +48,8 @@
     $pass = new PasswordElement();
 
     $pass
-
     ->setName('password')
-
     ->setId('password');
-
     
 
     $pass->setValidator($pv);
@@ -63,9 +59,7 @@
     $repite = new PasswordElement();
 
     $repite
-
     ->setName('repite_password')
-
     ->setId('repite_password');
 
     $repite->setValidator(new PasswordMatchValidator($pass, 'Las contraseñas no coinciden', true));
@@ -85,7 +79,7 @@
 
     if ("POST" === $_SERVER["REQUEST_METHOD"]) {
         $form->validate();
-        if (!$form-harError()) {
+        if (!$form->hasError()) {
             try {
                 $usuario = new Usuario($nombreUsuario->getValue(), $email->getValue(), $pass->getValue());
                 $repositorio->save($usuario);
@@ -94,7 +88,7 @@
             } catch (QueryException $qe ) {
                 $exception = $qe->getMessage();
                 if (strpos($exception, "1062") !== false) {
-                    if (strpos($exception, "usuarname") !== false) {
+                    if (strpos($exception, "username") !== false) {
                         $form->addError("Ya existe un usuario registrado con dicho nombre de usuario");
                     } else if (strpos($exception, "email") !== false) {
                         $form->addError("Ya existe un usuario registrado con dicho correo electronico");
@@ -109,3 +103,5 @@
             }
         }
     }
+
+    include ("./views/register.view.php");

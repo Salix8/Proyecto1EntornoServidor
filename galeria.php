@@ -21,6 +21,12 @@
   require_once "./repository/CategoriaRepository.php";
   require_once "./repository/ImagenGaleriaRepository.php";
 
+  session_start();
+
+  if (!isset($_SESSION['username'])) {
+    header('location: /login.php');
+  }
+  
   
   $info = $urlImagen = "";
   $sql = "";
