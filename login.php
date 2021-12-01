@@ -57,7 +57,7 @@
         if (!$form->hasError()) {
             try {
                 $usuario = $repositorio->findByUserNameAndPassword($nombreUsuario->getValue(), $pass->getValue());
-                $_SESSION["usurname"] = $usuario->getUsername();
+                $_SESSION["username"] = $usuario->getUsername();
                 header("location: /");
             } catch (QueryException $qe ){
                 $form->addError($qe->getMessage());

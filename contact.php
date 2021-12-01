@@ -13,6 +13,7 @@
     require_once "./repository/MensajeRepository.php";
     require_once "./core/App.php";
 
+    session_start();
     $config = require_once 'app/config.php';
     App::bind("config", $config);
     App::bind("connection", Connection::make($config['database']));

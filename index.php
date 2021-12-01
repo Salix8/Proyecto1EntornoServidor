@@ -8,6 +8,7 @@
     require_once "./repository/AsociadoRepository.php";
     require_once "./repository/ImagenGaleriaRepository.php";
 
+    session_start();
     
     $config = require_once 'app/config.php';
     App::bind("config", $config);
