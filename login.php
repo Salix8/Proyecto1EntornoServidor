@@ -14,11 +14,12 @@
     require_once "./repository/UsuarioRepository.php";
     require_once "./core/App.php";
     require_once "./security/PlainPasswordGenerator.php";
+    require_once "./security/BCryptPasswordGenerator.php";
 
     $config = require_once 'app/config.php';
     App::bind("config", $config);
     App::bind("connection", Connection::make($config['database']));
-    $repositorio = new UsuarioRepository(new PlainPasswordGenerator());
+    $repositorio = new UsuarioRepository(new BCryptPasswordGenerator());
 
     session_start();
 
